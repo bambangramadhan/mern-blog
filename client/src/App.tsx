@@ -1,12 +1,28 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import About from "./pages/About";
+import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
 
-const App = () => {
+const App = (props) => {
   return (
-    <div>
-      <h1 className="text-3xl text-blue-300">app</h1>
-      <h2 className=" text-green-300 ">Hi</h2>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/projects" element={<Projects />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
+
+App.propTypes = {};
 
 export default App;
