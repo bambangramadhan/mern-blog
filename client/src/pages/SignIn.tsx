@@ -1,6 +1,12 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -8,8 +14,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const [errorMsg, setErrorMsg] = useState<null | string>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { loading, error: errorMsg } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e: { target: { id: string; value: string } }) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -17,11 +23,10 @@ const SignIn = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return setErrorMsg("Please fill out all fields.");
+      return dispatch(signInFailure("Please fill out all fields."));
     }
     try {
-      setLoading(true);
-      setErrorMsg(null);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,17 +34,14 @@ const SignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMsg(data.message);
+        dispatch(signInFailure(data.message));
       }
       if (res.ok) {
         navigate("/");
+        dispatch(signInSuccess(data));
       }
     } catch (error) {
-      console.error(error);
-      setErrorMsg(error?.message);
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      dispatch(signInFailure(error?.message));
     }
   };
   return (
