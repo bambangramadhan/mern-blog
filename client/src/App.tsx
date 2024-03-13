@@ -1,5 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 import Home from "./pages/Home";
@@ -8,8 +6,9 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-const App = (props) => {
+const App = () => {
   return (
     <BrowserRouter>
       <Header />
@@ -21,6 +20,7 @@ const App = (props) => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
